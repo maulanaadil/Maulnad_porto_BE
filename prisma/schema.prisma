@@ -8,11 +8,12 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  role  Role    @default(User)
-  posts Post[]
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  name      String?
+  role      Role    @default(User)
+  posts     Post[]
+  projects  Project[]
 }
 
 model Post {
@@ -25,6 +26,27 @@ model Post {
   updatedAt   DateTime @updatedAt
   authorId    Int?
   author      User?    @relation(fields: [authorId], references: [id])
+  linkTo      String   @default("")  
+}
+
+model Project {
+  id            Int     @id @default(autoincrement())
+  title         String  @db.VarChar(255)
+  description   String  @db.VarChar(350)
+  imageUrl      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  authorId      Int
+  author        User   @relation(fields: [authorId], references: [id])
+  platform      PLATFORM @default(Web)
+  linkWebsite   String   @db.VarChar(255)
+  stack         String   @db.VarChar(255)
+}
+
+enum PLATFORM {
+  Web
+  Design
+  Mobile
 }
 
 enum Role {

@@ -10,10 +10,13 @@ export const CreatePostSchema = object({
     }),
     title: string({
       required_error: "title is required!",
-    }).min(8),
+    }).min(8, { message: "title must be at least 8 characters" }),
     description: string({
       required_error: "description is required!",
-    }),
+    }).min(16, { message: "description must be at least 16 characters" }),
+    linkTo: string({
+      required_error: "linkTo is required!",
+    }).url({ message: "linkTo must be a valid URL" }),
     published: string({
       required_error: "published is required!",
     }),
@@ -27,10 +30,13 @@ export const UpdatePostSchema = object({
   body: object({
     title: string({
       required_error: "title is required!",
-    }).min(8),
+    }).min(8, { message: "title must be at least 8 characters" }),
     description: string({
       required_error: "description is required!",
-    }).min(10),
+    }).min(16, { message: "description must be at least 16 characters" }),
+    linkTo: string({
+      required_error: "linkTo is required!",
+    }).url({ message: "linkTo must be a valid URL" }),
     published: string({
       required_error: "published is required!",
     }),
