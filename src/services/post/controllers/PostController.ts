@@ -1,19 +1,14 @@
 import response from "@/helpers/response";
 import httpCodes from "@/helpers/httpCodes";
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { zParse } from "@/middlewares/validateResource";
 import { CreatePostSchema, UpdatePostSchema } from "../schema/posts.schema";
 
-const prisma = new PrismaClient();
+import * as PostService from "../service/post.service";
 
 const getPosts = async (req: Request, res: Response) => {
   try {
-    const posts = await prisma.post.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const posts = await PostService.getAllPost();
 
     return response(res, httpCodes.Ok, "Get all posts success!", posts);
   } catch (error: any) {
@@ -23,11 +18,7 @@ const getPosts = async (req: Request, res: Response) => {
 
 const getPostById = async (req: Request, res: Response) => {
   try {
-    const post = await prisma.post.findUnique({
-      where: {
-        id: Number(req.params.id),
-      },
-    });
+    const post = await PostService.getPostById(parseInt(req.params.id));
 
     if (!post) {
       return response(res, httpCodes.NotFound, "Post not found!", null);
@@ -41,20 +32,10 @@ const getPostById = async (req: Request, res: Response) => {
 
 const createPost = async (req: Request, res: Response) => {
   try {
-    const imageUrl = req.file?.filename;
-    const { title, published, authorId, description, linkTo } = req.body;
     await zParse(CreatePostSchema, req);
-
-    const post = await prisma.post.create({
-      data: {
-        authorId: parseInt(authorId),
-        title,
-        description,
-        imageUrl,
-        published: published === "true" ? true : false,
-        linkTo,
-      },
-    });
+    const data = req.body;
+    const image = req.file?.filename;
+    const post = await PostService.createPost(data, image);
 
     return response(res, httpCodes.Created, "Create post success!", post);
   } catch (error: any) {
@@ -65,30 +46,18 @@ const createPost = async (req: Request, res: Response) => {
 const updatePost = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const imageUrl = req.file?.filename;
-    const { title, description, published, linkTo } = req.body;
+    const data = req.body;
+    const image = req.file?.filename;
 
-    const selectedPost = await prisma.post.findFirst({
-      where: { id: parseInt(id) },
-    });
+    const selectedPost = await PostService.findPost(parseInt(id));
 
     if (!selectedPost) {
       return response(res, httpCodes.NotFound, "Post not found!", null);
     }
 
     await zParse(UpdatePostSchema, req);
-    const updatePost = await prisma.post.update({
-      where: {
-        id: parseInt(id),
-      },
-      data: {
-        title,
-        description,
-        imageUrl,
-        published: published === "true" ? true : false,
-        linkTo,
-      },
-    });
+
+    const updatePost = await PostService.updatePost(data, parseInt(id), image);
     return response(res, httpCodes.Ok, "Update post success!", updatePost);
   } catch (error: any) {
     return response(res, httpCodes.InternalServerError, error.message, null);
@@ -99,19 +68,13 @@ const deletePost = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const selectedPost = await prisma.post.findFirst({
-      where: { id: parseInt(id) },
-    });
+    const selectedPost = await PostService.findPost(parseInt(id));
 
     if (!selectedPost) {
       return response(res, httpCodes.NotFound, "Post not found!", null);
     }
 
-    await prisma.post.delete({
-      where: {
-        id: parseInt(id),
-      },
-    });
+    await PostService.deletePost(parseInt(id));
 
     return response(res, httpCodes.Ok, "Delete post success!", null);
   } catch (error: any) {
