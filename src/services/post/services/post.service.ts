@@ -10,7 +10,7 @@ type Post = {
   linkTo: string;
 };
 
-export const getAllPost = async (): Promise<Post[]> => {
+export const getPosts = async (): Promise<Post[]> => {
   return db.post.findMany({
     orderBy: {
       createdAt: "desc",
@@ -18,7 +18,7 @@ export const getAllPost = async (): Promise<Post[]> => {
   });
 };
 
-export const getPostById = async (id: number): Promise<Post | null> => {
+export const getPost = async (id: number): Promise<Post | null> => {
   return db.post.findUnique({
     where: {
       id,
@@ -57,7 +57,7 @@ export const updatePost = async (
   data: Omit<Post, "id">,
   id: number,
   imageUrl: string | undefined | null
-) => {
+): Promise<Post> => {
   const { title, description, published, linkTo } = data;
 
   return db.post.update({

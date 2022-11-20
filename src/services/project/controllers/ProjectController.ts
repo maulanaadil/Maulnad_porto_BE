@@ -1,6 +1,5 @@
 import response from "@/helpers/response";
 import httpCodes from "@/helpers/httpCodes";
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { zParse } from "@/middlewares/validateResource";
 import {
@@ -8,15 +7,11 @@ import {
   UpdateProjectSchema,
 } from "../schema/project.schema";
 
-const prisma = new PrismaClient();
+import * as ProjectService from "../services/project.service";
 
 const getProjects = async (req: Request, res: Response) => {
   try {
-    const projects = await prisma.project.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const projects = await ProjectService.getProjects();
     return response(res, httpCodes.Ok, "Get all projects success!", projects);
   } catch (error: any) {
     return response(res, httpCodes.InternalServerError, error.message, null);
@@ -25,11 +20,7 @@ const getProjects = async (req: Request, res: Response) => {
 
 const getProjectById = async (req: Request, res: Response) => {
   try {
-    const project = await prisma.project.findUnique({
-      where: {
-        id: Number(req.params.id),
-      },
-    });
+    const project = await ProjectService.getProject(parseInt(req.params.id));
 
     if (!project) {
       return response(
@@ -47,22 +38,12 @@ const getProjectById = async (req: Request, res: Response) => {
 
 const createProject = async (req: Request, res: Response) => {
   try {
+    const data = req.body;
     const imageUrl = req.file?.filename;
-    const { authorId, title, description, linkWebsite, platform, stack } =
-      req.body;
     await zParse(CreateProjectSchema, req);
 
-    const project = await prisma.project.create({
-      data: {
-        authorId: parseInt(authorId),
-        title,
-        description,
-        imageUrl,
-        linkWebsite,
-        platform,
-        stack,
-      },
-    });
+    const project = await ProjectService.createProject(data, imageUrl);
+
     return response(res, httpCodes.Created, "Create project success!", project);
   } catch (error: any) {
     return response(res, httpCodes.InternalServerError, error.message, null);
@@ -72,14 +53,10 @@ const createProject = async (req: Request, res: Response) => {
 const updateProject = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const data = req.body;
     const imageUrl = req.file?.filename;
-    const { title, description, linkWebsite, platform, stack } = req.body;
 
-    const selectedProject = await prisma.project.findUnique({
-      where: {
-        id: parseInt(id),
-      },
-    });
+    const selectedProject = await ProjectService.findProject(parseInt(id));
 
     if (!selectedProject) {
       return response(
@@ -91,19 +68,11 @@ const updateProject = async (req: Request, res: Response) => {
     }
 
     await zParse(UpdateProjectSchema, req);
-    const updateProject = await prisma.project.update({
-      where: {
-        id: parseInt(id),
-      },
-      data: {
-        title,
-        description,
-        imageUrl,
-        linkWebsite,
-        platform,
-        stack,
-      },
-    });
+    const updateProject = await ProjectService.updateProject(
+      data,
+      parseInt(id),
+      imageUrl
+    );
     return response(
       res,
       httpCodes.Ok,
@@ -119,11 +88,7 @@ const updateProject = async (req: Request, res: Response) => {
 const deleteProject = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const selectedProject = await prisma.project.findUnique({
-      where: {
-        id: parseInt(id),
-      },
-    });
+    const selectedProject = await ProjectService.findProject(parseInt(id));
 
     if (!selectedProject) {
       return response(
@@ -134,11 +99,7 @@ const deleteProject = async (req: Request, res: Response) => {
       );
     }
 
-    await prisma.project.delete({
-      where: {
-        id: parseInt(id),
-      },
-    });
+    await ProjectService.deleteProject(parseInt(id));
     return response(
       res,
       httpCodes.Ok,

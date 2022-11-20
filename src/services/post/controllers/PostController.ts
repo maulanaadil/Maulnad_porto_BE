@@ -4,11 +4,11 @@ import { Request, Response } from "express";
 import { zParse } from "@/middlewares/validateResource";
 import { CreatePostSchema, UpdatePostSchema } from "../schema/posts.schema";
 
-import * as PostService from "../service/post.service";
+import * as PostService from "../services/post.service";
 
 const getPosts = async (req: Request, res: Response) => {
   try {
-    const posts = await PostService.getAllPost();
+    const posts = await PostService.getPosts();
 
     return response(res, httpCodes.Ok, "Get all posts success!", posts);
   } catch (error: any) {
@@ -18,7 +18,7 @@ const getPosts = async (req: Request, res: Response) => {
 
 const getPostById = async (req: Request, res: Response) => {
   try {
-    const post = await PostService.getPostById(parseInt(req.params.id));
+    const post = await PostService.getPost(parseInt(req.params.id));
 
     if (!post) {
       return response(res, httpCodes.NotFound, "Post not found!", null);

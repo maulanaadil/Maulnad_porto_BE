@@ -1,4 +1,4 @@
-import { nativeEnum, object, string, z } from "zod";
+import { object, string, z } from "zod";
 
 export const CreateProjectSchema = object({
   file: object({
