@@ -1,14 +1,5 @@
 import { db } from "@/utils/db.server";
-
-type Post = {
-  id: number;
-  authorId?: number | string | null;
-  title: string;
-  description: string;
-  imageUrl?: string | undefined | null;
-  published: boolean;
-  linkTo: string;
-};
+import { Post } from "@prisma/client";
 
 export const getPosts = async (): Promise<Post[]> => {
   return db.post.findMany({
@@ -30,12 +21,11 @@ export const createPost = async (
   data: Omit<Post, "id">,
   imageUrl: string | undefined | null
 ): Promise<Post> => {
-  const { title, description, published, linkTo } = data;
-  const authorId = String(data.authorId || null);
+  const { authorId, title, description, published, linkTo } = data;
 
   return db.post.create({
     data: {
-      authorId: parseInt(authorId),
+      authorId,
       title,
       description,
       imageUrl,

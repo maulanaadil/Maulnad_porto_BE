@@ -13,10 +13,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use("/images", express.static("images"));
-app.use(router);
+app.use("/api/v1", router);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  // redirect to my own domain
+  res.redirect("https://maulnad-website.vercel.app/");
 });
 
 app.listen(port, () => {

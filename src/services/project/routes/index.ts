@@ -1,5 +1,5 @@
 import { Router } from "express";
-import project from "../controllers/ProjectController";
+import project from "../controllers/project.controller";
 import uploadImage from "@/middlewares/validateUploadImage";
 
 const router: Router = Router();

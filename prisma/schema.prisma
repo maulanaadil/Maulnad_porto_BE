@@ -8,12 +8,24 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  name      String?
-  role      Role    @default(User)
-  posts     Post[]
-  projects  Project[]
+  id            String     @id @unique @default(uuid())
+  email         String  @unique
+  password      String
+  name          String?
+  role          Role    @default(User)
+  refreshTokens RefreshToken[]
+  posts         Post[]
+  projects      Project[]
+}
+
+model RefreshToken {
+  id              String     @id @unique @default(uuid())
+  hashedToken     String  @unique
+  user            User    @relation(fields: [userId], references: [id])
+  userId          String
+  revoked         Boolean @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Post {
@@ -24,7 +36,7 @@ model Post {
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  authorId    Int?
+  authorId    String?
   author      User?    @relation(fields: [authorId], references: [id])
   linkTo      String   @default("")  
 }
@@ -36,7 +48,7 @@ model Project {
   imageUrl      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  authorId      Int
+  authorId      String
   author        User   @relation(fields: [authorId], references: [id])
   platform      PLATFORM @default(Web)
   linkWebsite   String   @db.VarChar(255)

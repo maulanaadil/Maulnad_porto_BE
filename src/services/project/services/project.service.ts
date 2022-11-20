@@ -1,15 +1,5 @@
 import { db } from "@/utils/db.server";
-
-type Project = {
-  id: number;
-  authorId?: number | string | null;
-  title: string;
-  description: string;
-  imageUrl?: string | undefined | null;
-  platform: "Web" | "Mobile" | "Design";
-  linkWebsite: string;
-  stack: string;
-};
+import { Project } from "@prisma/client";
 
 export const getProjects = async (): Promise<Project[]> => {
   return db.project.findMany({
@@ -31,12 +21,11 @@ export const createProject = async (
   data: Omit<Project, "id">,
   imageUrl: string | undefined | null
 ): Promise<Project> => {
-  const { title, description, platform, linkWebsite, stack } = data;
-  const authorId = String(data.authorId || null);
+  const { authorId, title, description, platform, linkWebsite, stack } = data;
 
   return db.project.create({
     data: {
-      authorId: parseInt(authorId),
+      authorId,
       title,
       description,
       imageUrl,
@@ -61,13 +50,11 @@ export const updateProject = async (
   imageUrl: string | undefined | null
 ): Promise<Project> => {
   const { title, description, platform, linkWebsite, stack } = data;
-  const authorId = String(data.authorId || null);
   return db.project.update({
     where: {
       id,
     },
     data: {
-      authorId: parseInt(authorId),
       title,
       description,
       imageUrl,
