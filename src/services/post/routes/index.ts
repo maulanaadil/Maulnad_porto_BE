@@ -1,11 +1,13 @@
 import { Router } from "express";
 import post from "../controllers/post.controller";
 import uploadImage from "@/middlewares/validateUploadImage";
+import { isAuthenticated } from "@/middlewares/isAuthenticated";
+import { isAdmin } from "@/middlewares/isAdmin";
 
 const router: Router = Router();
 
 // get posts
-router.get("/", post.getPosts);
+router.get("/", [isAuthenticated, isAdmin], post.getPosts);
 
 // get a post by id
 router.get("/:id", post.getPostById);

@@ -51,17 +51,12 @@ const login = async (req: Request, res: Response) => {
     const existingUser = await UsersService.findUserByEmail(email);
 
     if (!existingUser) {
-      return response(
-        res,
-        httpCodes.Forbidden,
-        "Invalid login credentials",
-        null
-      );
+      return response(res, httpCodes.Forbidden, "There's no account", null);
     }
 
     const validPassword = await bcrypt.compare(password, existingUser.password);
     if (!validPassword) {
-      return response(res, httpCodes.Forbidden, "Invalid password", null);
+      return response(res, httpCodes.Forbidden, "Wring password", null);
     }
 
     const jti = uuidv4();
