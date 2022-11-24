@@ -1,19 +1,25 @@
-FROM node:16
+FROM mhart/alpine-node:16 as builder
 
-# Create app directory
-WORKDIR /usr/src/app
+RUN mkdir -p /app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+WORKDIR /app
 
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
-# Bundle app source
 COPY . .
 
-EXPOSE 8080
-CMD [ "npm", "start" ]
+RUN yarn install
+
+RUN npx esbuild ./src/index.ts --bundle --platform=node --outfile=build/index.js
+
+FROM mhart/alpine-node:16 as app
+
+ENV NODE_ENV=production
+
+RUN mkdir -p /app
+
+WORKDIR /app
+
+COPY --chown=node:node --from=builder /app/build/index.js /app
+
+EXPOSE 4500
+
+ENTRYPOINT ["node", "index.js"]
