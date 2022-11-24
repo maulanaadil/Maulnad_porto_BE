@@ -8,7 +8,7 @@ COPY . .
 
 RUN yarn install
 
-RUN npx esbuild ./src/index.ts --bundle --platform=node --outfile=build/index.js
+RUN yarn build
 
 FROM mhart/alpine-node:16 as app
 
