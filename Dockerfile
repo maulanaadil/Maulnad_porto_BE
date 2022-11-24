@@ -22,4 +22,4 @@ COPY --chown=node:node --from=builder /app/build/server.js /app
 
 EXPOSE 4500
 
-ENTRYPOINT ["node", "index.js"]
+ENTRYPOINT ["node", "server.js"]

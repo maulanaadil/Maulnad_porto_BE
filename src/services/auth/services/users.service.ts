@@ -1,4 +1,4 @@
-import bycrypt from "bcrypt";
+import Password from "@/helpers/hashPassword";
 import { db } from "@/utils/db.server";
 import { User } from "@prisma/client";
 
@@ -17,7 +17,7 @@ export const createUser = async ({
   name,
   role,
 }: Omit<User, "id">): Promise<User> => {
-  const hashedPassword = await bycrypt.hash(password, 10);
+  const hashedPassword = await Password.hashPassword(password);
   const user = await db.user.create({
     data: {
       email,

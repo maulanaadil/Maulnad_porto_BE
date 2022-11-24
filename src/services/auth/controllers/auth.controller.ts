@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import response from "@/helpers/response";
 import httpCodes from "@/helpers/httpCodes";
 import { zParse } from "@/helpers/validateResource";
-import bcrypt from "bcrypt";
 
 import { loginSchema, registerSchema } from "../schema/auth.schema";
 import * as UsersService from "../services/users.service";
@@ -11,6 +10,7 @@ import { generateTokens } from "@/utils/jwt.server";
 
 import { User } from "@prisma/client";
 import { addRefreshTokenToWhiteList } from "../services/auth.service";
+import Password from "@/helpers/hashPassword";
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -54,7 +54,11 @@ const login = async (req: Request, res: Response) => {
       return response(res, httpCodes.Forbidden, "There's no account", null);
     }
 
-    const validPassword = await bcrypt.compare(password, existingUser.password);
+    // const validPassword = await bcrypt.compare(password, existingUser.password);
+    const validPassword = await Password.compare(
+      existingUser.password,
+      password
+    );
     if (!validPassword) {
       return response(res, httpCodes.Forbidden, "Wring password", null);
     }
