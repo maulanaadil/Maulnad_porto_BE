@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import response from "@/helpers/response";
 import httpCodes from "@/helpers/httpCodes";
-import { zParse } from "@/middlewares/validateResource";
+import { zParse } from "@/helpers/validateResource";
 import bcrypt from "bcrypt";
 
 import { loginSchema, registerSchema } from "../schema/auth.schema";

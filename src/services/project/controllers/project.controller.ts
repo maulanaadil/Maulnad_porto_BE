@@ -1,7 +1,7 @@
 import response from "@/helpers/response";
 import httpCodes from "@/helpers/httpCodes";
 import { Request, Response } from "express";
-import { zParse } from "@/middlewares/validateResource";
+import { zParse } from "@/helpers/validateResource";
 import {
   CreateProjectSchema,
   UpdateProjectSchema,
