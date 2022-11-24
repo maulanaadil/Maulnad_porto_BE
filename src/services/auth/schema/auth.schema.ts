@@ -11,7 +11,7 @@ export const registerSchema = object({
     password: string({
       required_error: "password is required!",
     }).min(8, { message: "password must be at least 8 characters" }),
-    role: z.enum(["User", "Admin"]),
+    role: z.enum(["User", "Admin"]).optional(),
   }),
 });
 

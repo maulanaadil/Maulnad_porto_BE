@@ -20,6 +20,25 @@ const getPostsByUserEmail = async (req: Request, res: Response) => {
   }
 };
 
+const getProjectsByUserEmail = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.params;
+    const getProjectsUserByEmail = await UserService.getProjectsByUserEmail(
+      email
+    );
+
+    return response(
+      res,
+      httpCodes.Ok,
+      "Get all projects success!",
+      getProjectsUserByEmail
+    );
+  } catch (error: any) {
+    response(res, httpCodes.InternalServerError, error.message, null);
+  }
+};
+
 export default {
   getPostsByUserEmail,
+  getProjectsByUserEmail,
 };

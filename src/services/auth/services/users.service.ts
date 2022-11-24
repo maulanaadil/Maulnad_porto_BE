@@ -49,3 +49,16 @@ export const getPostsByUserEmail = async (
     },
   });
 };
+
+export const getProjectsByUserEmail = async (
+  email: string
+): Promise<User | null> => {
+  return db.user.findUnique({
+    where: {
+      email,
+    },
+    include: {
+      projects: true,
+    },
+  });
+};

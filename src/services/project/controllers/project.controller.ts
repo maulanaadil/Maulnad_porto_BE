@@ -3,11 +3,14 @@ import httpCodes from "@/helpers/httpCodes";
 import { Request, Response } from "express";
 import { zParse } from "@/helpers/validateResource";
 import {
+  CreateProjectByAdminSchema,
   CreateProjectSchema,
   UpdateProjectSchema,
 } from "../schema/project.schema";
 
 import * as ProjectService from "../services/project.service";
+import { RequestWithPayload } from "@/types/user.jwt.type";
+import { User } from "@prisma/client";
 
 const getProjects = async (req: Request, res: Response) => {
   try {
@@ -36,13 +39,34 @@ const getProjectById = async (req: Request, res: Response) => {
   }
 };
 
-const createProject = async (req: Request, res: Response) => {
+const createProjectByAdmin = async (req: Request, res: Response) => {
   try {
     const data = req.body;
     const imageUrl = req.file?.filename;
-    await zParse(CreateProjectSchema, req);
+    await zParse(CreateProjectByAdminSchema, req);
 
     const project = await ProjectService.createProject(data, imageUrl);
+
+    return response(res, httpCodes.Created, "Create project success!", project);
+  } catch (error: any) {
+    return response(res, httpCodes.InternalServerError, error.message, null);
+  }
+};
+
+const createProject = async (req: RequestWithPayload, res: Response) => {
+  try {
+    const data = req.body;
+    const imageUrl = req.file?.filename;
+    const { id } = req.payload as User;
+    await zParse(CreateProjectSchema, req);
+
+    const project = await ProjectService.createProject(
+      {
+        ...data,
+        authorId: id,
+      },
+      imageUrl
+    );
 
     return response(res, httpCodes.Created, "Create project success!", project);
   } catch (error: any) {
@@ -115,6 +139,7 @@ export default {
   getProjects,
   getProjectById,
   createProject,
+  createProjectByAdmin,
   updateProject,
   deleteProject,
 };

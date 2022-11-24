@@ -23,7 +23,7 @@ export const CreatePostByAdminSchema = object({
   }),
 });
 
-export const CreatePostByOwner = object({
+export const CreatePostByOwnerScehma = object({
   file: object({
     filename: string(),
   }),
@@ -39,6 +39,11 @@ export const CreatePostByOwner = object({
     }).url({ message: "linkTo must be a valid URL" }),
     published: string({
       required_error: "published is required!",
+    }),
+  }),
+  payload: object({
+    id: string({
+      required_error: "authorId is required!",
     }),
   }),
 });

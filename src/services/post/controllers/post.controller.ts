@@ -4,12 +4,11 @@ import { Request, Response } from "express";
 import { zParse } from "@/helpers/validateResource";
 import {
   CreatePostByAdminSchema,
-  CreatePostByOwner,
+  CreatePostByOwnerScehma,
   UpdatePostSchema,
 } from "../schema/posts.schema";
 
 import * as PostService from "../services/post.service";
-import * as UserService from "../../auth/services/users.service";
 import { User } from "@prisma/client";
 import { RequestWithPayload } from "@/types/user.jwt.type";
 
@@ -57,7 +56,7 @@ const createPostByAdmin = async (req: Request, res: Response) => {
 
 const createPost = async (req: RequestWithPayload, res: Response) => {
   try {
-    await zParse(CreatePostByOwner, req);
+    await zParse(CreatePostByOwnerScehma, req);
     const data = req.body;
     const { id } = req.payload as User;
     const image = req.file?.filename;
