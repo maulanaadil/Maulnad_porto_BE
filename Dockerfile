@@ -8,7 +8,7 @@ COPY . .
 
 RUN npm install
 
-RUN npx esbuild ./src/index.ts --bundle --platform=node --outfile=build/index.js
+RUN npx esbuild ./src/server.ts --bundle --platform=node --outfile=build/server.js
 
 FROM mhart/alpine-node:16 as app
 
