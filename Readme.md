@@ -49,6 +49,11 @@ $ npm run dev
 
 Go to `localhost:{PORT}/docs` to see documentation API
 
+or
+
+Go to Postman DOC for the `[LATEST API]` Documentation
+https://documenter.getpostman.com/view/12008621/2s8Ysp1F8v
+
 ## License
 
 [MIT](LICENSE)

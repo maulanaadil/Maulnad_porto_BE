@@ -36,3 +36,16 @@ export const findUserById = async (id: string): Promise<User | null> => {
     },
   });
 };
+
+export const getPostsByUserEmail = async (
+  email: string
+): Promise<User | null> => {
+  return db.user.findUnique({
+    where: {
+      email,
+    },
+    include: {
+      posts: true,
+    },
+  });
+};

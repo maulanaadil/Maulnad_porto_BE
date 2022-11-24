@@ -2,9 +2,16 @@ import response from "@/helpers/response";
 import httpCodes from "@/helpers/httpCodes";
 import { Request, Response } from "express";
 import { zParse } from "@/middlewares/validateResource";
-import { CreatePostSchema, UpdatePostSchema } from "../schema/posts.schema";
+import {
+  CreatePostByAdminSchema,
+  CreatePostByOwner,
+  UpdatePostSchema,
+} from "../schema/posts.schema";
 
 import * as PostService from "../services/post.service";
+import * as UserService from "../../auth/services/users.service";
+import { User } from "@prisma/client";
+import { RequestWithPayload } from "@/types/user.jwt.type";
 
 const getPosts = async (req: Request, res: Response) => {
   try {
@@ -30,12 +37,37 @@ const getPostById = async (req: Request, res: Response) => {
   }
 };
 
-const createPost = async (req: Request, res: Response) => {
+const createPostByAdmin = async (req: Request, res: Response) => {
   try {
-    await zParse(CreatePostSchema, req);
+    await zParse(CreatePostByAdminSchema, req);
     const data = req.body;
     const image = req.file?.filename;
     const post = await PostService.createPost(data, image);
+
+    return response(
+      res,
+      httpCodes.Created,
+      "Create post by admin success!",
+      post
+    );
+  } catch (error: any) {
+    return response(res, httpCodes.InternalServerError, error.message, null);
+  }
+};
+
+const createPost = async (req: RequestWithPayload, res: Response) => {
+  try {
+    await zParse(CreatePostByOwner, req);
+    const data = req.body;
+    const { id } = req.payload as User;
+    const image = req.file?.filename;
+    const post = await PostService.createPost(
+      {
+        ...data,
+        authorId: id,
+      },
+      image
+    );
 
     return response(res, httpCodes.Created, "Create post success!", post);
   } catch (error: any) {
@@ -85,6 +117,7 @@ const deletePost = async (req: Request, res: Response) => {
 export default {
   getPosts,
   getPostById,
+  createPostByAdmin,
   createPost,
   updatePost,
   deletePost,

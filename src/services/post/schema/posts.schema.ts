@@ -1,6 +1,6 @@
 import { object, string } from "zod";
 
-export const CreatePostSchema = object({
+export const CreatePostByAdminSchema = object({
   file: object({
     filename: string(),
   }),
@@ -8,6 +8,26 @@ export const CreatePostSchema = object({
     authorId: string({
       required_error: "authorId is required!",
     }),
+    title: string({
+      required_error: "title is required!",
+    }).min(8, { message: "title must be at least 8 characters" }),
+    description: string({
+      required_error: "description is required!",
+    }).min(16, { message: "description must be at least 16 characters" }),
+    linkTo: string({
+      required_error: "linkTo is required!",
+    }).url({ message: "linkTo must be a valid URL" }),
+    published: string({
+      required_error: "published is required!",
+    }),
+  }),
+});
+
+export const CreatePostByOwner = object({
+  file: object({
+    filename: string(),
+  }),
+  body: object({
     title: string({
       required_error: "title is required!",
     }).min(8, { message: "title must be at least 8 characters" }),

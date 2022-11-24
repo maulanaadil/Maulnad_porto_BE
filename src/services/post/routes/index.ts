@@ -3,6 +3,7 @@ import post from "../controllers/post.controller";
 import uploadImage from "@/middlewares/validateUploadImage";
 import { isAuthenticated } from "@/middlewares/isAuthenticated";
 import { isAdmin } from "@/middlewares/isAdmin";
+import { isOwner } from "@/middlewares/isOwner";
 
 const router: Router = Router();
 
@@ -13,12 +14,31 @@ router.get("/", [isAuthenticated, isAdmin], post.getPosts);
 router.get("/:id", post.getPostById);
 
 // create posts
-router.post("/", uploadImage.single("image"), post.createPost);
+router.post(
+  "/",
+  [isAuthenticated, uploadImage.single("image"), isAdmin],
+  post.createPostByAdmin
+);
+router.post(
+  "/:email",
+  [isAuthenticated, uploadImage.single("image"), isOwner],
+  post.createPost
+);
 
 // update post
-router.patch("/:id", uploadImage.single("image"), post.updatePost);
+router.patch(
+  "/:id",
+  [isAuthenticated, uploadImage.single("image"), isAdmin],
+  post.updatePost
+);
+router.patch(
+  "/:email/:id",
+  [isAuthenticated, uploadImage.single("image"), isOwner],
+  post.updatePost
+);
 
 // delete post
-router.delete("/:id", post.deletePost);
+router.delete("/:id", [isAuthenticated, isAdmin], post.deletePost);
+router.delete("/:email/:id", [isAuthenticated, isOwner], post.deletePost);
 
 export default router;

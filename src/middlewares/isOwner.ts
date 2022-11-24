@@ -1,17 +1,17 @@
 import httpCodes from "@/helpers/httpCodes";
 import response from "@/helpers/response";
 import { RequestWithPayload } from "@/types/user.jwt.type";
-import { User } from "@prisma/client";
 import { NextFunction, Response } from "express";
 
-export const isAdmin = async (
+export const isOwner = async (
   req: RequestWithPayload,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { role } = req.payload as User;
-    if (role === "User") {
+    const { email } = req.params;
+    const { payload } = req;
+    if (email !== payload.email) {
       return response(
         res,
         httpCodes.Forbidden,
@@ -19,10 +19,13 @@ export const isAdmin = async (
         null
       );
     }
-    return next();
+    next();
   } catch (error) {
-    response(res, httpCodes.Unauthorized, "Unauthorized", null);
+    response(
+      res,
+      httpCodes.BadRequest,
+      "Error your not the owner of the contents",
+      null
+    );
   }
-
-  return response(res, httpCodes.Unauthorized, "Unauthorized", null);
 };
