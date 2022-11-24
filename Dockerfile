@@ -18,7 +18,7 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-COPY --chown=node:node --from=builder /app/build/index.js /app
+COPY --chown=node:node --from=builder /app/build/server.js /app
 
 EXPOSE 4500
 
