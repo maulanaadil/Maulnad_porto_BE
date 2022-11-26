@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#161616",
+          },
+        },
+      },
+    };
+  </script>
+  <body class="bg-primary">
+    <header><%- include('../partials/header') %></header>
+
+    <main class="w-[568px] m-auto my-10 flex flex-col gap-8">
+      <section>
+        <h2 class="text-[24px] text-[#dededf] mb-4 underline underline-offset-8">
+          Repository
+        </h2>
+        <p class="text-[#7f7f7f] text-base my-1">
+          Hi this repository is public and
+          <span class="text-[#dededf] font-medium">Free</span> you can clone it by
+          copy command below.
+        </p>
+        <shell-component
+          data-code="git clone git@github.com:maulanaadil started-template-express.git"
+        ></shell-component>
+      </section>
+
+      <section>
+        <h2 class="text-[24px] text-[#dededf] my-4 underline underline-offset-8">
+          Documentation
+        </h2>
+        <p class="text-[#7f7f7f] text-base my-1">
+          For the documentation you can visit here.
+          <div class="postman-run-button my-2"
+  data-postman-action="collection/import"
+  data-postman-var-1="0fddc74eda522674f0e9"
+  data-postman-param="env%5BMaulnad_porto_dev%5D=W3sia2V5IjoiYXV0aFRva2VuIiwidmFsdWUiOiJpbml0VmFsIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImRlZmF1bHQiLCJzZXNzaW9uVmFsdWUiOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMyVnlTV1FpT2lKaFpEUXdNbVZqT0Mwell6bGxMVFF3TTJNdE9HTTJPQzAyWVdFeU9HVmhOV0kyTVRNaUxDSnBZWFFpT2pFMk5qazBOelkyTkRJc0ltVjRjQ0k2TVRZMi4uLiIsInNlc3Npb25JbmRleCI6MH0seyJrZXkiOiJ1cmxfZGV2IiwidmFsdWUiOiJodHRwOi8vbG9jYWxob3N0OjUwMDEiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMSIsInNlc3Npb25JbmRleCI6MX0seyJrZXkiOiJ1cmwiLCJ2YWx1ZSI6Imh0dHBzOi8vbWF1bG5hZC1hcGkudXAucmFpbHdheS5hcHAiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHBzOi8vbWF1bG5hZC1hcGkudXAucmFpbHdheS5hcHAiLCJzZXNzaW9uSW5kZXgiOjJ9LHsia2V5IjoiaWQiLCJ2YWx1ZSI6IjEiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6IjEiLCJzZXNzaW9uSW5kZXgiOjN9XQ=="></div>
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-[24px] text-[#dededf] my-4 underline underline-offset-8">
+          Any questions?
+        </h2>
+        <p class="text-[#7f7f7f] text-base my-1">
+          You can ask to me on my social media. through the link below.
+        </p>
+        <div class="flex justify-start">
+          <a
+            href="https://www.instagram.com/maulanaadill/"
+            target="_blank"
+            class="text-[#dededf] text-base font-medium hover:underline"
+            >@maulanaadil</a>
+        </p>
+      </section>
+    </main>
+
+    <footer><%- include('../partials/footer') %></footer>
+    <script
+      type="text/javascript"
+      src="/javascript/customComponents/shell.component.js"
+    ></script>
+    <script type="text/javascript">
+  (function (p,o,s,t,m,a,n) {
+    !p[s] && (p[s] = function () { (p[t] || (p[t] = [])).push(arguments); });
+    !o.getElementById(s+t) && o.getElementsByTagName("head")[0].appendChild((
+      (n = o.createElement("script")),
+      (n.id = s+t), (n.async = 1), (n.src = m), n
+    ));
+  }(window, document, "_pm", "PostmanRunObject", "https://run.pstmn.io/button.js"));
+</script>
+  </body>
+</html>

@@ -4,10 +4,10 @@ const prisma = new PrismaClient();
 
 async function seedUserAdmin() {
   await prisma.user.upsert({
-    where: { email: "resaherlyan@maulnad.com" },
+    where: { email: "resaherlyan@express.com" },
     update: {},
     create: {
-      email: "resaherlyan@maulnad.com",
+      email: "resaherlyan@express.com",
       name: "Resa Herlyan",
       password: "Maulnad2001",
       role: "Admin",
