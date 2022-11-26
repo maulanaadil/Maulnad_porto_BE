@@ -8,17 +8,9 @@ COPY . .
 
 RUN npm install
 
-RUN npx esbuild ./src/server.ts --bundle --platform=node --outfile=build/server.js
+RUN npm run build
 
-FROM mhart/alpine-node:16 as app
-
-ENV NODE_ENV=production
-
-RUN mkdir -p /app
-
-WORKDIR /app
-
-COPY --chown=node:node --from=builder /app/build/server.js /app
+WORKDIR /app/dist
 
 EXPOSE 4500
 
