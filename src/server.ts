@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
-import "module-alias/register";
+require("module-alias/register");
 import router from "./routes";
 
 dotenv.config();
@@ -15,7 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use("/api/v1", router);
 app.use(express.static(path.join(__dirname, "public")));
-console.log(path.join(__dirname, "public"));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
