@@ -7,7 +7,7 @@
     "@": "dist"
   },
   "scripts": {
-    "build": "npx tsc && cp -r src/views dist/views",
+    "build": "npx tsc && cp -r src/views dist/views && cp -r src/public dist/public",
     "start": "node dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon ./src/server.ts\"",
     "seed": "ts-node prisma/seed.ts",
