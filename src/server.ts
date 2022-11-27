@@ -4,6 +4,8 @@ import cors from "cors";
 import path from "path";
 require("module-alias/register");
 import router from "./routes";
+import helmet from "helmet";
+import compression from "compression";
 
 dotenv.config();
 
@@ -13,6 +15,14 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
+app.use(compression());
+
 app.use("/api/v1", router);
 app.use(express.static(path.join(__dirname, "public")));
 
