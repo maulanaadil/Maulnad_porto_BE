@@ -20,7 +20,10 @@ const fileFilter = (
 
 const fileStorage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, "./images");
+    callback(
+      null,
+      process.env.NODE_ENV === "production" ? "./dist/images" : "./images"
+    );
   },
   filename(req, file, callback) {
     callback(null, `${Date.now()}-${file.originalname}`);
