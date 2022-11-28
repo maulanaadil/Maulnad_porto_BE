@@ -12,6 +12,8 @@ RUN npm run build
 
 WORKDIR /app/dist
 
+RUN mkdir -p /images
+
 EXPOSE 4500
 
 ENTRYPOINT ["node", "server.js"]
