@@ -24,6 +24,7 @@ app.use(
 app.use(compression());
 
 app.use("/api/v1", router);
+// app.use("/images", express.static("images"));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.set("views", path.join(__dirname, "views"));

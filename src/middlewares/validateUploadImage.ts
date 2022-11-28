@@ -1,5 +1,6 @@
 import { Request } from "express";
 import multer, { FileFilterCallback } from "multer";
+import path from "path";
 
 const fileFilter = (
   req: Request,
@@ -19,7 +20,7 @@ const fileFilter = (
 
 const fileStorage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, "./images/");
+    callback(null, "./src/public/images");
   },
   filename(req, file, callback) {
     callback(null, `${Date.now()}-${file.originalname}`);
